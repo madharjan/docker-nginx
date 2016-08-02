@@ -1,0 +1,10 @@
+#!/bin/bash
+
+set -e
+
+# Forwards the Nginx error.log to the Docker logs.
+if [[ -e /var/log/nginx/error.log ]]; then
+	exec tail -F /var/log/nginx/error.log
+else
+	exec sleep 10
+fi
