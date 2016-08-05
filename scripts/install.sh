@@ -3,7 +3,7 @@ set -e
 source /build/config/buildconfig
 set -x
 
-NGINX_CONFIG_PATH=/build/config
+NGINX_CONFIG_PATH=/build/config/nginx
 
 apt-get update
 apt-get upgrade -y --no-install-recommends
