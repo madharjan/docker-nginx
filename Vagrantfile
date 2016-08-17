@@ -9,7 +9,7 @@ $vm_proxy = true
 $vm_guest = true
 #$network_prefix = "192.168.56."
 #$ip_start = 100
-#$forwarded_ports = {80,8080}
+#$forwarded_ports = {80 => 8080}
 
 CLOUD_META_PATH = "./cloud-init/meta-data"
 CLOUD_CONF_PATH = "./cloud-init/user-data"
