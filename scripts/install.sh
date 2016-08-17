@@ -6,9 +6,8 @@ set -x
 NGINX_CONFIG_PATH=/build/config/nginx
 
 apt-get update
-apt-get upgrade -y --no-install-recommends
 
 ## Install Nginx and runit service
 /build/services/nginx/nginx.sh
 
-cp ${NGINX_CONFIG_PATH}/nginx-default.conf /etc/nginx/conf.d/default.conf
+cp ${NGINX_CONFIG_PATH}/default.conf /etc/nginx/conf.d/default.conf
