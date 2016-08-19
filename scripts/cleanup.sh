@@ -1,7 +1,11 @@
 #!/bin/bash
 set -e
-source /build/config/buildconfig
-set -x
+export LC_ALL=C
+export DEBIAN_FRONTEND=noninteractive
+
+if [ "$DEBUG" == true ]; then
+  set -x
+fi
 
 apt-get clean
 rm -rf /build

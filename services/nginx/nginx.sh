@@ -1,12 +1,16 @@
 #!/bin/bash
 set -e
-source /build/config/buildconfig
-set -x
+export LC_ALL=C
+export DEBIAN_FRONTEND=noninteractive
+
+if [ "$DEBUG" == true ]; then
+  set -x
+fi
 
 NGINX_BUILD_PATH=/build/services/nginx
 
 ## Install Nginx.
-$minimal_apt_get_install nginx
+apt-get install -y --no-install-recommends nginx
 
 cp ${NGINX_BUILD_PATH}/nginx.conf /etc/nginx/
 rm -rf /etc/nginx/sites-enabled
