@@ -113,9 +113,8 @@ sudo mkdir -p /opt/docker/nginx/log/
 
 **Copy default configuration and html files to host**
 ```
-sudo docker cp nginx:/etc/nginx/conf.d/default.conf /opt/docker/nginx/etc/
-sudo docker cp nginx:/usr/share/nginx/html/index.html /opt/docker/nginx/html/
-sudo docker cp nginx:/usr/share/nginx/html/50x.html /opt/docker/nginx/html/
+sudo docker exec nginx tar Ccf /etc/nginx - conf.d | tar Cxf /opt/docker/nginx/etc -
+sudo docker exec nginx tar Ccf /usr/share/nginx - html | tar Cxf /opt/docker/nginx -
 ```
 
 **Update Nginx configuration as necessary**
@@ -145,6 +144,6 @@ docker run -d -t \
 **Restart `nginx`** (runit service)
 ```
 docker exec -t \
-  nginx-ssl \
+  nginx \
   /bin/bash -c "/usr/bin/sv stop nginx; sleep 1; /usr/bin/sv start nginx;"
 ```

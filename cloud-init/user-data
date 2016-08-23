@@ -45,7 +45,7 @@ write_files:
 
         apt-get install -y linux-image-extra-$(uname -r)
         apt-get --purge remove -y chef puppet at dbus rpcbind landscape-client open-vm-tools friendly-recovery
-        apt-get autoremove - y
+        apt-get autoremove -y
         userdel -r ubuntu
 
         echo "=== Done ==="
