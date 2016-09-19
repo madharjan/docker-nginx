@@ -45,7 +45,7 @@ git push origin 1.4.6
 ```
 docker run -d -t \
   --name nginx \
-  madharjan/docker-nginx:1.4.6 /sbin/my_init
+  madharjan/docker-nginx:1.4.6
 ```
 
 **Prepare folder on host for container volumes**
@@ -82,7 +82,7 @@ docker run -d -t \
   -v /opt/docker/nginx/html:/usr/share/nginx/html \
   -v /opt/docker/nginx/log:/var/log/nginx \
   --name nginx \
-  madharjan/docker-nginx:1.4.6 /sbin/my_init
+  madharjan/docker-nginx:1.4.6
 ```
 
 **Systemd Unit File**
@@ -107,7 +107,7 @@ ExecStart=/usr/bin/docker run \
   -v /opt/docker/nginx/etc/conf.d:/etc/nginx/conf.d \
   -v /opt/docker/nginx/log:/var/log/nginx \
   --name nginx \
-  madharjan/docker-nginx:1.4.6 /sbin/my_init
+  madharjan/docker-nginx:1.4.6
 
 ExecStop=/usr/bin/docker stop -t 2 nginx
 
