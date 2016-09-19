@@ -1,4 +1,7 @@
 # docker-nginx
+
+[![](https://images.microbadger.com/badges/image/madharjan/docker-nginx.svg)](http://microbadger.com/images/madharjan/docker-nginx "Get your own image badge on microbadger.com")
+
 Docker container for Nginx based on [madharjan/docker-base](https://github.com/madharjan/docker-base/)
 
 * Nginx 1.4.6 (docker-nginx)

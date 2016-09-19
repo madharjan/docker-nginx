@@ -7,12 +7,12 @@ VERSION = 1.4.6
 all: build
 
 build:
-	docker build --build-arg NGINX_VERSION=${VERSION} -t $(NAME):$(VERSION) --rm .
-	docker build --build-arg NGINX_VERSION=${VERSION} -f Dockerfile.onbuild -t $(NAME)-onbuild:$(VERSION) --rm .
+	docker build --build-arg NGINX_VERSION=${VERSION} --build-arg VCS_REF=`git rev-parse --short HEAD` -t $(NAME):$(VERSION) --rm .
+	docker build --build-arg NGINX_VERSION=${VERSION} --build-arg VCS_REF=`git rev-parse --short HEAD` -f Dockerfile.onbuild -t $(NAME)-onbuild:$(VERSION) --rm .
 
 build_test:
-	docker build --build-arg NGINX_VERSION=${VERSION} --build-arg DEBUG=true -t $(NAME):$(VERSION) --rm .
-	docker build --build-arg NGINX_VERSION=${VERSION} --build-arg DEBUG=true -f Dockerfile.onbuild -t $(NAME)-onbuild:$(VERSION) --rm .
+	docker build --build-arg NGINX_VERSION=${VERSION} --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg DEBUG=true -t $(NAME):$(VERSION) --rm .
+	docker build --build-arg NGINX_VERSION=${VERSION} --build-arg VCS_REF=`git rev-parse --short HEAD` --build-arg DEBUG=true -f Dockerfile.onbuild -t $(NAME)-onbuild:$(VERSION) --rm .
 
 clean_images:
 	docker rmi $(NAME):latest $(NAME):$(VERSION) || true
