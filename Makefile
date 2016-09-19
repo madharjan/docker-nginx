@@ -32,3 +32,5 @@ release: test tag_latest
 	docker push $(NAME)
 	docker push $(NAME)-onbuild
 	@echo "*** Don't forget to create a tag. git tag $(VERSION) && git push origin $(VERSION) ***"
+	curl -X POST https://hooks.microbadger.com/images/madharjan/docker-nginx/Y7V64vqIP3mXfQarb7lAU8uE2XU=
+	curl -X POST https://hooks.microbadger.com/images/madharjan/docker-nginx-onbuild/LZWNxuxQcBV42gTZPpqcyk7UQfo=
