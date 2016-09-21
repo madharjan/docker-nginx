@@ -8,9 +8,9 @@ Docker container for Nginx based on [madharjan/docker-base](https://github.com/m
 
 **Environment**
 
-| Variable       | Default | Set to disable |
+| Variable       | Default | Example        |
 |----------------|---------|----------------|
-| DISABLE_NGINX  | 0       | 1              |
+| DISABLE_NGINX  | 0       | 1 (to disable) |
 
 ## Build
 
