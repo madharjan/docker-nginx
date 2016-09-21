@@ -14,4 +14,13 @@ apt-get update
 ## Install Nginx and runit service
 /build/services/nginx/nginx.sh
 
-cp ${NGINX_CONFIG_PATH}/default.conf /etc/nginx/conf.d/default.conf
+mkdir -p /config/etc/nginx/conf.d
+mkdir -p /config/usr/share/nginx/html
+
+cp ${NGINX_CONFIG_PATH}/default.conf /config/etc/nginx/conf.d/default.conf
+cp ${NGINX_CONFIG_PATH}/index.html /config/usr/share/nginx/html/index.html
+cp ${NGINX_CONFIG_PATH}/50x.html /config/usr/share/nginx/html/50x.html
+
+mkdir -p /etc/my_init.d
+cp /build/services/nginx-startup.sh /etc/my_init.d
+chmod 750 /etc/my_init.d/nginx-startup.sh
