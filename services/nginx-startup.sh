@@ -22,8 +22,5 @@ fi
 
 if [ ! -f /usr/share/nginx/html/index.html ]; then
   cp /config/usr/share/nginx/html/index.html /usr/share/nginx/html/index.html
-fi
-
-if [ ! -f /usr/share/nginx/html/50x.html ]; then
   cp /config/usr/share/nginx/html/50x.html /usr/share/nginx/html/50x.html
 fi
