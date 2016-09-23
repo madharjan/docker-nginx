@@ -30,9 +30,10 @@ tests:
 		./bats/bin/bats test/tests.bats
 
 clean:
-		docker stop nginx nginx_no_nginx || true
-		docker rm nginx nginx_no_nginx || true
-		rm -rf ./test/etc ./test/html
+	docker exec -t nginx /bin/bash -c "rm -rf /etc/nginx/conf.d/*" || true
+	docker exec -t nginx /bin/bash -c "rm -rf /usr/share/nginx/html/*" || true
+	docker stop nginx nginx_no_nginx || true
+	docker rm nginx nginx_no_nginx || true
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
