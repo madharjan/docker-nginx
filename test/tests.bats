@@ -18,7 +18,7 @@
   [ "$status" -eq 1 ]
 }
 
-@test "checking request: 200 (index.html via http)" {
+@test "checking request: status (index.html via http)" {
   run docker exec nginx /bin/bash -c "curl -I -s -L http://localhost/index.html | head -n 1 | cut -d$' ' -f2"
   [ "$status" -eq 0 ]
   [ "$output" -eq 200 ]
