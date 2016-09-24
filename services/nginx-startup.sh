@@ -8,7 +8,7 @@ fi
 
 DISABLE_NGINX=${DISABLE_NGINX:-0}
 
-if ! [ "${DISABLE_NGINX}" -eq 0 ]; then
+if [ ! "${DISABLE_NGINX}" -eq 0 ]; then
   touch /etc/service/nginx/down
   touch /etc/service/nginx-log-forwarder/down
 else
@@ -23,4 +23,6 @@ fi
 if [ ! -f /usr/share/nginx/html/index.html ]; then
   cp /config/usr/share/nginx/html/index.html /usr/share/nginx/html/index.html
   cp /config/usr/share/nginx/html/50x.html /usr/share/nginx/html/50x.html
+
+  chown -R www-data:www-data /usr/share/nginx/html/*
 fi

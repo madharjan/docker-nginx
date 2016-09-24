@@ -14,11 +14,13 @@ build:
 	 $(NAME):$(VERSION) --rm .
 
 run:
-	mkdir -p ./test/etc ./test/html
+	rm -rf /tmp/nginx
+	mkdir -p /tmp/nginx/etc
+	mkdir -p /tmp/nginx/html
 	docker run -d -t \
 		-e DEBUG=true \
-		-v "`pwd`/test/etc":/etc/nginx/conf.d \
-		-v "`pwd`/test/html":/usr/share/nginx/html \
+		-v /tmp/nginx/etc:/etc/nginx/conf.d \
+		-v /tmp/nginx/html:/usr/share/nginx/html \
 		--name nginx -t $(NAME):$(VERSION)
 
 	docker run -d -t \
@@ -34,6 +36,7 @@ clean:
 	docker exec -t nginx /bin/bash -c "rm -rf /usr/share/nginx/html/*" || true
 	docker stop nginx nginx_no_nginx || true
 	docker rm nginx nginx_no_nginx || true
+	rm -rf /tmp/nginx || true
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest

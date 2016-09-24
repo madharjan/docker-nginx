@@ -1,20 +1,20 @@
 @test "checking process: nginx (master process)" {
-  run docker exec nginx /bin/bash -c "ps aux --forest | grep -v grep | grep 'nginx: master process /usr/sbin/nginx'"
+  run docker exec nginx /bin/bash -c "ps aux | grep -v grep | grep 'nginx: master process /usr/sbin/nginx'"
   [ "$status" -eq 0 ]
 }
 
 @test "checking process: nginx (worker process)" {
-  run docker exec nginx /bin/bash -c "ps aux --forest | grep -v grep | grep 'nginx: worker process'"
+  run docker exec nginx /bin/bash -c "ps aux | grep -v grep | grep 'nginx: worker process'"
   [ "$status" -eq 0 ]
 }
 
 @test "checking process: nginx (master process disabled by DISABLE_NGINX)" {
-  run docker exec nginx_no_nginx /bin/bash -c "ps aux --forest | grep -v grep | grep 'nginx: master process /usr/sbin/nginx'"
+  run docker exec nginx_no_nginx /bin/bash -c "ps aux | grep -v grep | grep 'nginx: master process /usr/sbin/nginx'"
   [ "$status" -eq 1 ]
 }
 
 @test "checking process: nginx (worker process disabled by DISABLE_NGINX)" {
-  run docker exec nginx_no_nginx /bin/bash -c "ps aux --forest | grep -v grep | grep 'nginx: worker process'"
+  run docker exec nginx_no_nginx /bin/bash -c "ps aux | grep -v grep | grep 'nginx: worker process'"
   [ "$status" -eq 1 ]
 }
 
