@@ -23,6 +23,7 @@ fi
 if [ ! -f /usr/share/nginx/html/index.html ]; then
   cp /config/usr/share/nginx/html/index.html /usr/share/nginx/html/index.html
   cp /config/usr/share/nginx/html/50x.html /usr/share/nginx/html/50x.html
+  cp /config/usr/share/nginx/html/favicon.ico /usr/share/nginx/html/favicon.ico
 
   chown -R www-data:www-data /usr/share/nginx/html/*
 fi

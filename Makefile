@@ -10,30 +10,30 @@ build:
 	docker build \
 	 --build-arg NGINX_VERSION=${VERSION} \
 	 --build-arg VCS_REF=`git rev-parse --short HEAD` \
-	 --build-arg DEBUG=true -t \
-	 $(NAME):$(VERSION) --rm .
+	 --build-arg DEBUG=true \
+	 -t $(NAME):$(VERSION) --rm .
 
 run:
 	rm -rf /tmp/nginx
 	mkdir -p /tmp/nginx/etc
 	mkdir -p /tmp/nginx/html
-	docker run -d -t \
+	docker run -d \
 		-e DEBUG=true \
 		-v /tmp/nginx/etc:/etc/nginx/conf.d \
 		-v /tmp/nginx/html:/usr/share/nginx/html \
-		--name nginx -t $(NAME):$(VERSION)
+		--name nginx $(NAME):$(VERSION)
 
-	docker run -d -t \
+	docker run -d \
 		-e DEBUG=true \
 		-e DISABLE_NGINX=1 \
-		--name nginx_no_nginx -t $(NAME):$(VERSION)
+		--name nginx_no_nginx $(NAME):$(VERSION)
 
 tests:
 		./bats/bin/bats test/tests.bats
 
 clean:
-	docker exec -t nginx /bin/bash -c "rm -rf /etc/nginx/conf.d/*" || true
-	docker exec -t nginx /bin/bash -c "rm -rf /usr/share/nginx/html/*" || true
+	docker exec nginx /bin/bash -c "rm -rf /etc/nginx/conf.d/*" || true
+	docker exec nginx /bin/bash -c "rm -rf /usr/share/nginx/html/*" || true
 	docker stop nginx nginx_no_nginx || true
 	docker rm nginx nginx_no_nginx || true
 	rm -rf /tmp/nginx || true

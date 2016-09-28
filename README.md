@@ -63,7 +63,7 @@ sudo mkdir -p /opt/docker/nginx/log/
 docker stop nginx
 docker rm nginx
 
-docker run -d -t \
+docker run -d \
   -p 80:80 \
   -v /opt/docker/nginx/etc:/etc/nginx/conf.d \
   -v /opt/docker/nginx/html:/usr/share/nginx/html \
