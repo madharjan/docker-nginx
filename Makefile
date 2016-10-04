@@ -17,19 +17,25 @@ run:
 	rm -rf /tmp/nginx
 	mkdir -p /tmp/nginx/etc
 	mkdir -p /tmp/nginx/html
+
 	docker run -d \
 		-e DEBUG=true \
 		-v /tmp/nginx/etc:/etc/nginx/conf.d \
 		-v /tmp/nginx/html:/usr/share/nginx/html \
 		--name nginx $(NAME):$(VERSION)
 
+	sleep 2
+
 	docker run -d \
 		-e DEBUG=true \
 		-e DISABLE_NGINX=1 \
 		--name nginx_no_nginx $(NAME):$(VERSION)
 
+	sleep 2
+
 tests:
-		./bats/bin/bats test/tests.bats
+	sleep 2
+	./bats/bin/bats test/tests.bats
 
 clean:
 	docker exec nginx /bin/bash -c "rm -rf /etc/nginx/conf.d/*" || true
