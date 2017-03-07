@@ -4,7 +4,11 @@
 
 Docker container for Nginx based on [madharjan/docker-base](https://github.com/madharjan/docker-base/)
 
-* Nginx 1.4.6 (docker-nginx)
+**Features**
+* Nginx error log forwarded to Docker logs
+* Bats ([sstephenson/bats](https://github.com/sstephenson/bats/)) based test cases
+
+## Nginx 1.4.6 (docker-nginx)
 
 **Environment**
 
