@@ -9,7 +9,7 @@ Docker container for Nginx based on [madharjan/docker-base](https://github.com/m
 
 * Nginx error log forwarded to Docker logs
 * Bats ([bats-core/bats-core](https://github.com/bats-core/bats-core)) based test cases
-* Deploy/update web projects from git.
+* Deploy/update web projects from git
 
 ## Nginx 1.10.3 (docker-nginx)
 
@@ -64,7 +64,7 @@ git push origin 1.10.3
 ### Prepare folder on host for container volumes
 
 ```bash
-sudo mkdir -p /opt/docker/nginx/etc/
+sudo mkdir -p /opt/docker/nginx/etc/conf.d
 sudo mkdir -p /opt/docker/nginx/html/
 sudo mkdir -p /opt/docker/nginx/log/
 ```
@@ -77,7 +77,7 @@ docker rm nginx
 
 docker run -d \
   -p 80:80 \
-  -v /opt/docker/nginx/etc:/etc/nginx/conf.d \
+  -v /opt/docker/nginx/etc/conf.d:/etc/nginx/conf.d \
   -v /opt/docker/nginx/html:/var/www/html \
   -v /opt/docker/nginx/log:/var/log/nginx \
   --name nginx \
