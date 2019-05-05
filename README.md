@@ -1,16 +1,18 @@
 # docker-nginx
 
-[![](https://images.microbadger.com/badges/image/madharjan/docker-nginx.svg)](http://microbadger.com/images/madharjan/docker-nginx "Get your own image badge on microbadger.com")
+[![Build Status](https://travis-ci.com/madharjan/docker-nginx.svg?branch=master)](https://travis-ci.com/madharjan/docker-nginx)
+[![Layers](https://images.microbadger.com/badges/image/madharjan/docker-nginx.svg)](http://microbadger.com/images/madharjan/docker-nginx)
 
 Docker container for Nginx based on [madharjan/docker-base](https://github.com/madharjan/docker-base/)
 
-**Features**
+## Features
+
 * Nginx error log forwarded to Docker logs
-* Bats ([sstephenson/bats](https://github.com/sstephenson/bats/)) based test cases
+* Bats ([bats-core/bats-core](https://github.com/bats-core/bats-core)) based test cases
 
-## Nginx 1.4.6 (docker-nginx)
+## Nginx 1.10.3 (docker-nginx)
 
-**Environment**
+### Environment
 
 | Variable       | Default | Example        |
 |----------------|---------|----------------|
@@ -18,13 +20,14 @@ Docker container for Nginx based on [madharjan/docker-base](https://github.com/m
 
 ## Build
 
-**Clone this project**
-```
+### Clone this project
+
+```bash
 git clone https://github.com/madharjan/docker-nginx
 cd docker-nginx
 ```
 
-**Build Containers**
+### Build Container
 ```
 # login to DockerHub
 docker login
@@ -45,39 +48,43 @@ make tag_latest
 make release
 ```
 
-**Tag and Commit to Git**
-```
-git tag 1.4.6
-git push origin 1.4.6
+### Tag and Commit to Git
+
+```bash
+git tag 1.10.3
+git push origin 1.10.3
 ```
 
-## Run Container
+# Run Container
 
 ### Nginx
 
-**Prepare folder on host for container volumes**
-```
+### Prepare folder on host for container volumes
+
+```bash
 sudo mkdir -p /opt/docker/nginx/etc/
 sudo mkdir -p /opt/docker/nginx/html/
 sudo mkdir -p /opt/docker/nginx/log/
 ```
 
-**Run `docker-nginx`**
-```
+### Run `docker-nginx`
+
+```bash
 docker stop nginx
 docker rm nginx
 
 docker run -d \
   -p 80:80 \
   -v /opt/docker/nginx/etc:/etc/nginx/conf.d \
-  -v /opt/docker/nginx/html:/usr/share/nginx/html \
+  -v /opt/docker/nginx/html:/var/www/html \
   -v /opt/docker/nginx/log:/var/log/nginx \
   --name nginx \
-  madharjan/docker-nginx:1.4.6
+  madharjan/docker-nginx:1.10.3
 ```
 
-**Systemd Unit File**
-```
+### Systemd Unit File
+
+```txt
 [Unit]
 Description=Nginx
 
@@ -91,15 +98,15 @@ ExecStartPre=-/bin/mkdir -p /opt/docker/nginx/html
 ExecStartPre=-/bin/mkdir -p /opt/docker/nginx/log
 ExecStartPre=-/usr/bin/docker stop nginx
 ExecStartPre=-/usr/bin/docker rm nginx
-ExecStartPre=-/usr/bin/docker pull madharjan/docker-nginx:1.4.6
+ExecStartPre=-/usr/bin/docker pull madharjan/docker-nginx:1.10.3
 
 ExecStart=/usr/bin/docker run \
   -p 80:80 \
   -v /opt/docker/nginx/etc/conf.d:/etc/nginx/conf.d \
-  -v /opt/docker/nginx/html:/usr/share/nginx/html \
+  -v /opt/docker/nginx/html:/var/www/html \
   -v /opt/docker/nginx/log:/var/log/nginx \
   --name nginx \
-  madharjan/docker-nginx:1.4.6
+  madharjan/docker-nginx:1.10.3
 
 ExecStop=/usr/bin/docker stop -t 2 nginx
 

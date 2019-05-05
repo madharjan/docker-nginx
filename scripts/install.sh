@@ -15,13 +15,16 @@ apt-get update
 /build/services/nginx/nginx.sh
 
 mkdir -p /config/etc/nginx/conf.d
-mkdir -p /config/usr/share/nginx/html
+mkdir -p /config/var/www/html
 
 cp ${NGINX_CONFIG_PATH}/default.conf /config/etc/nginx/conf.d/default.conf
-cp ${NGINX_CONFIG_PATH}/index.html /config/usr/share/nginx/html/index.html
-cp ${NGINX_CONFIG_PATH}/50x.html /config/usr/share/nginx/html/50x.html
-cp ${NGINX_CONFIG_PATH}/favicon.ico /config/usr/share/nginx/html/favicon.ico
+cp ${NGINX_CONFIG_PATH}/index.html /config/var/www/html/index.html
+cp ${NGINX_CONFIG_PATH}/403.html /config/var/www/html/403.html
+cp ${NGINX_CONFIG_PATH}/404.html /config/var/www/html/404.html
+cp ${NGINX_CONFIG_PATH}/405.html /config/var/www/html/405.html
+cp ${NGINX_CONFIG_PATH}/50x.html /config/var/www/html/50x.html
+cp ${NGINX_CONFIG_PATH}/favicon.ico /config/var/www/html/favicon.ico
 
 mkdir -p /etc/my_init.d
-cp /build/services/nginx-startup.sh /etc/my_init.d
-chmod 750 /etc/my_init.d/nginx-startup.sh
+cp /build/services/20-nginx.sh /etc/my_init.d
+chmod 750 /etc/my_init.d/20-nginx.sh

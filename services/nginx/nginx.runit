@@ -2,6 +2,10 @@
 
 set -e
 
+if [ "${DEBUG}" = true ]; then
+  set -x
+fi
+
 if [ ! -e /var/log/nginx/error.log ]; then
 	# The Nginx log forwarder might be sleeping and waiting
 	# until the error log becomes available. We restart it in

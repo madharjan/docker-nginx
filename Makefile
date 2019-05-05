@@ -1,6 +1,8 @@
 
 NAME = madharjan/docker-nginx
-VERSION = 1.4.6
+VERSION = 1.10.3
+
+DEBUG ?= true
 
 .PHONY: all build run tests clean tag_latest release clean_images
 
@@ -10,7 +12,7 @@ build:
 	docker build \
 	 --build-arg NGINX_VERSION=${VERSION} \
 	 --build-arg VCS_REF=`git rev-parse --short HEAD` \
-	 --build-arg DEBUG=true \
+	 --build-arg DEBUG=$(DEBUG) \
 	 -t $(NAME):$(VERSION) --rm .
 
 run:
@@ -19,15 +21,16 @@ run:
 	mkdir -p /tmp/nginx/html
 
 	docker run -d \
-		-e DEBUG=true \
+		-e DEBUG=$(DEBUG) \
 		-v /tmp/nginx/etc:/etc/nginx/conf.d \
-		-v /tmp/nginx/html:/usr/share/nginx/html \
+		-v /tmp/nginx/html:/var/www/html \
+		-P \
 		--name nginx $(NAME):$(VERSION)
 
 	sleep 2
 
 	docker run -d \
-		-e DEBUG=true \
+		-e DEBUG=$(DEBUG) \
 		-e DISABLE_NGINX=1 \
 		--name nginx_no_nginx $(NAME):$(VERSION)
 
@@ -39,7 +42,7 @@ tests:
 
 clean:
 	docker exec nginx /bin/bash -c "rm -rf /etc/nginx/conf.d/*" || true
-	docker exec nginx /bin/bash -c "rm -rf /usr/share/nginx/html/*" || true
+	docker exec nginx /bin/bash -c "rm -rf /var/www/html/*" || true
 	docker stop nginx nginx_no_nginx || true
 	docker rm nginx nginx_no_nginx || true
 	rm -rf /tmp/nginx || true
@@ -49,7 +52,6 @@ tag_latest:
 
 release: run tests clean tag_latest
 	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi
-	@if ! head -n 1 Changelog.md | grep -q 'release date'; then echo 'Please note the release date in Changelog.md.' && false; fi
 	docker push $(NAME)
 	@echo "*** Don't forget to create a tag. git tag $(VERSION) && git push origin $(VERSION) ***"
 	curl -X POST https://hooks.microbadger.com/images/madharjan/docker-nginx/JEGoeIhTzcKmaiXUikL3HE6W26k=

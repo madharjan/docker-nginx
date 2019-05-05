@@ -1,4 +1,4 @@
-FROM madharjan/docker-base:14.04
+FROM madharjan/docker-base:16.04
 MAINTAINER Madhav Raj Maharjan <madhav.maharjan@gmail.com>
 
 ARG VCS_REF
@@ -18,7 +18,7 @@ RUN /build/scripts/install.sh && /build/scripts/cleanup.sh
 
 
 
-VOLUME ["/etc/nginx/conf.d", "/usr/share/nginx/html", "/var/log/nginx"]
+VOLUME ["/etc/nginx/conf.d", "/var/www/html", "/var/log/nginx"]
 
 CMD ["/sbin/my_init"]
 
