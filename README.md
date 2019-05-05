@@ -136,7 +136,7 @@ docker run --rm -it \
   -e VERSION=1.10.3 \
   -e INSTALL_PROJECT=1 \
   -e PROJECT_GIT_REPO=https://github.com/BlackrockDigital/startbootstrap-creative.git \
-  -e PROJECT_TAG=v5.1.4 \
+  -e PROJECT_GIT_TAG=v5.1.4 \
   madharjan/docker-nginx:1.10.3 \
   /bin/sh -c "gen-systemd-unit" | \
   sudo tee /etc/systemd/system/nginx.service

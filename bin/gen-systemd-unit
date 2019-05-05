@@ -38,7 +38,7 @@ ExecStartPre=-/usr/bin/docker rm nginx
 ExecStartPre=-/usr/bin/docker pull madharjan/docker-nginx:${VERSION}
 
 ExecStart=/usr/bin/docker run \\
--p $PORT}:80 \\
+-p ${PORT}:80 \\
 -e INSTALL_PROJECT=${INSTALL_PROJECT} \\
 -e PROJECT_GIT_REPO=${PROJECT_GIT_REPO} \\
 -e PROJECT_GIT_TAG=${PROJECT_GIT_TAG} \\
