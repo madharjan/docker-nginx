@@ -77,7 +77,7 @@
 @test "checking request: project_intial (index.html via http)" {
   run docker exec nginx_project /bin/bash -c "curl -s -L http://localhost/index.html | wc -l"
   [ "$status" -eq 0 ]
-  [ "$output" -eq 273 ]
+  [ "$output" -eq 272 ]
 }
 
 @test "checking request: project_updated (index.html via http)" {
