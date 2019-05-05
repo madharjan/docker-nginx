@@ -16,11 +16,15 @@ else
   rm -f /etc/service/nginx-log-forwarder/down
 fi
 
-if [ ! -f /etc/nginx/conf.d/default.conf ]; then
+if [ -f /etc/nginx/conf.d/default.conf ]; then
+   echo "Nginx config already exists"
+else
   cp /config/etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 fi
 
-if [ ! -f /var/www/html/index.html ]; then
+if [ -f /var/www/html/index.html ]; then
+   echo "Nginx content already exists"
+else
   mkdir -p /var/www/html
   cp /config/var/www/html/index.html /var/www/html/index.html
   cp /config/var/www/html/403.html /var/www/html/403.html

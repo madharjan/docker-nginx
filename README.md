@@ -9,14 +9,18 @@ Docker container for Nginx based on [madharjan/docker-base](https://github.com/m
 
 * Nginx error log forwarded to Docker logs
 * Bats ([bats-core/bats-core](https://github.com/bats-core/bats-core)) based test cases
+* Deploy/update web projects from git.
 
 ## Nginx 1.10.3 (docker-nginx)
 
 ### Environment
 
-| Variable       | Default | Example        |
-|----------------|---------|----------------|
-| DISABLE_NGINX  | 0       | 1 (to disable) |
+| Variable            | Default | Example                                                          |
+|---------------------|---------|------------------------------------------------------------------|
+| DISABLE_NGINX       | 0       | 1 (to disable)                                                   |
+| INSTALL_PROJECT     | 0       | 1 (to enable)                                                    |
+| PROJECT_GIT_REPO    |         | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
+| PROJECT_GIT_TAG     |         | v1.0.1                                                                 |
 
 ## Build
 
@@ -28,7 +32,8 @@ cd docker-nginx
 ```
 
 ### Build Container
-```
+
+```bash
 # login to DockerHub
 docker login
 
@@ -43,7 +48,6 @@ make clean
 # tag
 make tag_latest
 
-# update Changelog.md
 # release
 make release
 ```
@@ -55,9 +59,7 @@ git tag 1.10.3
 git push origin 1.10.3
 ```
 
-# Run Container
-
-### Nginx
+## Run Container
 
 ### Prepare folder on host for container volumes
 
@@ -82,7 +84,9 @@ docker run -d \
   madharjan/docker-nginx:1.10.3
 ```
 
-### Systemd Unit File
+## Run via Systemd
+
+### Systemd Unit File - basic example
 
 ```txt
 [Unit]
@@ -112,4 +116,31 @@ ExecStop=/usr/bin/docker stop -t 2 nginx
 
 [Install]
 WantedBy=multi-user.target
+```
+
+### Generate Systemd Unit File - with deploy web projects
+
+| Variable            | Default          | Example                                                          |
+|---------------------|------------------|------------------------------------------------------------------|
+| PORT                | 80               | 8080                                                             |
+| VOLUME_HOME         | /opt/docker      | /opt/data                                                        |
+| VERSION             | 1.10.3           | latest                                                           |
+| INSTALL_PROJECT     | 0                | 1 (to enable)                                                    |
+| PROJECT_GIT_REPO    |                  | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
+| PROJECT_GIT_TAG     | HEAD             | v5.1.4                                                          |
+
+```bash
+docker run --rm -it \
+  -e PORT=80 \
+  -e VOLUME_HOME=/opt/docker \
+  -e VERSION=1.10.3 \
+  -e INSTALL_PROJECT=1 \
+  -e PROJECT_GIT_REPO=https://github.com/BlackrockDigital/startbootstrap-creative.git \
+  -e PROJECT_TAG=v5.1.4 \
+  madharjan/docker-nginx:1.10.3 \
+  /bin/sh -c "gen-systemd-unit" | \
+  sudo tee /etc/systemd/system/nginx.service
+
+sudo systemctl enable nginx
+sudo systemctl start nginx
 ```
