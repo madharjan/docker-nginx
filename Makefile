@@ -2,6 +2,8 @@
 NAME = madharjan/docker-nginx
 VERSION = 1.10.3
 
+DEBUG ?= true
+
 .PHONY: all build run tests stop clean tag_latest release clean_images
 
 all: build

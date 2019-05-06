@@ -36,5 +36,5 @@ cp /build/services/20-nginx.sh /etc/my_init.d
 chmod 750 /etc/my_init.d/20-nginx.sh
 
 cp /build/bin/gen-systemd-unit /usr/local/bin
-chmod 750 /usr/local/bin/gen-systemd-unit
+chmod 750 /usr/local/bin/nginx-systemd-unit
 
