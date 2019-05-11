@@ -1,13 +1,13 @@
 ## 1.10.3
 
-## Changes
+### Changes
 
 * Updated to Based on madharjan/docker-base:16.04
 * Added error_page config 50x,403,404,405 and test cases
 
 ## 1.4.6
 
-## Changes
+### Changes
 
 * Based on madharjan/docker-base:14.04
 * Using Nginx 1.4.6
