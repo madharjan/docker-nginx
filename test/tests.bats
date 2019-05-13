@@ -87,18 +87,27 @@
 }
 
 @test "checking request: project_updated (index.html via http)" {
-  docker stop nginx_project || true
-  docker rm nginx_project || true
+  docker stop nginx_project nginx_proxy || true
+  docker rm nginx_project nginx_proxy || true
   docker run -d \
     -e DEBUG=true \
     -v /tmp/nginx_project/etc:/etc/nginx/conf.d \
     -v /tmp/nginx_project/html:/var/www/html \
-    -p 172.18.0.1:8080:80 \
     -e INSTALL_PROJECT=1 \
     -e PROJECT_GIT_REPO=https://github.com/BlackrockDigital/startbootstrap-creative.git \
     -e PROJECT_GIT_TAG=v5.1.4 \
     --name nginx_project madharjan/docker-nginx:1.10.3 
   sleep 3
+
+  docker run -d \
+  --link nginx_project:project \
+  -e DEBUG=true \
+  -e DEFAULT_PROXY=1 \
+  -e PROXY_HOST=project \
+  -e PROXY_PORT=80 \
+  --name nginx_proxy madharjan/docker-nginx:1.10.3 
+
+	sleep 2
   run docker exec nginx_project /bin/bash -c "curl -s -L http://localhost/index.html | wc -l"
   [ "$status" -eq 0 ]
   [ "$output" -eq 262 ]

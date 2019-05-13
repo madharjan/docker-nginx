@@ -44,7 +44,6 @@ run:
 		-e DEBUG=$(DEBUG) \
 		-v /tmp/nginx_project/etc:/etc/nginx/conf.d \
 		-v /tmp/nginx_project/html:/var/www/html \
-		-p 172.18.0.1:8080:80 \
 		-e INSTALL_PROJECT=1 \
 		-e PROJECT_GIT_REPO=https://github.com/BlackrockDigital/startbootstrap-creative.git \
 		-e PROJECT_GIT_TAG=v5.0.0 \
@@ -53,10 +52,11 @@ run:
 	sleep 4
 
 	docker run -d \
+		--link nginx_project:project \
 		-e DEBUG=$(DEBUG) \
 		-e DEFAULT_PROXY=1 \
-		-e PROXY_HOST=172.18.0.1 \
-		-e PROXY_PORT=8080 \
+		-e PROXY_HOST=project \
+		-e PROXY_PORT=80 \
 		--name nginx_proxy $(NAME):$(VERSION)
 
 	sleep 2
