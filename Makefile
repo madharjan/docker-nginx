@@ -44,12 +44,22 @@ run:
 		-e DEBUG=$(DEBUG) \
 		-v /tmp/nginx_project/etc:/etc/nginx/conf.d \
 		-v /tmp/nginx_project/html:/var/www/html \
+		-p 172.18.0.1:8080:80 \
 		-e INSTALL_PROJECT=1 \
 		-e PROJECT_GIT_REPO=https://github.com/BlackrockDigital/startbootstrap-creative.git \
 		-e PROJECT_GIT_TAG=v5.0.0 \
 		--name nginx_project $(NAME):$(VERSION) 
 
 	sleep 4
+
+	docker run -d \
+		-e DEBUG=$(DEBUG) \
+		-e DEFAULT_PROXY=1 \
+		-e PROXY_HOST=172.18.0.1 \
+		-e PROXY_PORT=8080 \
+		--name nginx_proxy $(NAME):$(VERSION)
+
+	sleep 2
 
 tests:
 	sleep 2
@@ -61,10 +71,10 @@ stop:
 	docker exec nginx_project /bin/bash -c "rm -rf /etc/nginx/conf.d/*" || true
 	docker exec nginx_project /bin/bash -c "rm -rf /var/www/html/*" || true
 	docker exec nginx_project /bin/bash -c "rm -rf /var/www/html/.git" || true
-	docker stop nginx nginx_no_nginx nginx_project || true
+	docker stop nginx nginx_no_nginx nginx_project nginx_proxy|| true
 
 clean: stop
-	docker rm nginx nginx_no_nginx nginx_project || true
+	docker rm nginx nginx_no_nginx nginx_project nginx_proxy || true
 	rm -rf /tmp/nginx || true
 	rm -rf /tmp/nginx_project || true
 
@@ -75,7 +85,7 @@ release: run tests clean tag_latest
 	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi
 	docker push $(NAME)
 	@echo "*** Don't forget to create a tag. git tag $(VERSION) && git push origin $(VERSION) ***"
-	curl -s -X POST https://hooks.microbadger.com/images/madharjan/docker-nginx/JEGoeIhTzcKmaiXUikL3HE6W26k=
+	curl -s -X POST https://hooks.microbadger.com/images/$(NAME)/JEGoeIhTzcKmaiXUikL3HE6W26k=
 
 clean_images:
 	docker rmi $(NAME):latest $(NAME):$(VERSION) || true

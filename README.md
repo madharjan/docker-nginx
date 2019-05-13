@@ -15,12 +15,16 @@ Docker container for Nginx based on [madharjan/docker-base](https://github.com/m
 
 ### Environment
 
-| Variable            | Default | Example                                                          |
-|---------------------|---------|------------------------------------------------------------------|
-| DISABLE_NGINX       | 0       | 1 (to disable)                                                   |
-| INSTALL_PROJECT     | 0       | 1 (to enable)                                                    |
-| PROJECT_GIT_REPO    |         | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
-| PROJECT_GIT_TAG     |         | v1.0.1                                                                 |
+| Variable            | Default          | Example                                                          |
+|---------------------|------------------|------------------------------------------------------------------|
+| DISABLE_NGINX       | 0                | 1 (to disable)                                                   |
+| INSTALL_PROJECT     | 0                | 1 (to enable)                                                    |
+| PROJECT_GIT_REPO    |                  | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
+| PROJECT_GIT_TAG     | HEAD             | v5.1.4                                                           |
+| DEFAULT_PROXY       | 0                | 1 (to enable)                                                    |
+| PROXY_SCHEME        | http             | https                                                            |
+| PROXY_HOST          |                  | 127.0.0.1                                                        |
+| PROXY_PORT          | 8080             | 8000                                                             |
 
 ## Build
 
@@ -118,7 +122,7 @@ ExecStop=/usr/bin/docker stop -t 2 nginx
 WantedBy=multi-user.target
 ```
 
-### Generate Systemd Unit File - with deploy web projects
+## Generate Systemd Unit File - with deploy web projects or reverse proxy
 
 | Variable            | Default          | Example                                                          |
 |---------------------|------------------|------------------------------------------------------------------|
@@ -127,7 +131,13 @@ WantedBy=multi-user.target
 | VERSION             | 1.10.3           | latest                                                           |
 | INSTALL_PROJECT     | 0                | 1 (to enable)                                                    |
 | PROJECT_GIT_REPO    |                  | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
-| PROJECT_GIT_TAG     | HEAD             | v5.1.4                                                          |
+| PROJECT_GIT_TAG     | HEAD             | v5.1.4                                                           |
+| DEFAULT_PROXY       | 0                | 1 (to enable)                                                    |
+| PROXY_SCHEME        | http             | https                                                            |
+| PROXY_HOST          |                  | 127.0.0.1                                                        |
+| PROXY_PORT          | 8080             | 8000                                                             |
+
+### With deploy web projects
 
 ```bash
 docker run --rm -it \
@@ -137,6 +147,24 @@ docker run --rm -it \
   -e INSTALL_PROJECT=1 \
   -e PROJECT_GIT_REPO=https://github.com/BlackrockDigital/startbootstrap-creative.git \
   -e PROJECT_GIT_TAG=v5.1.4 \
+  madharjan/docker-nginx:1.10.3 \
+  /bin/sh -c "nginx-systemd-unit" | \
+  sudo tee /etc/systemd/system/nginx.service
+
+sudo systemctl enable nginx
+sudo systemctl start nginx
+```
+
+### With reverse proxy
+
+```bash
+docker run --rm -it \
+  -e PORT=80 \
+  -e VOLUME_HOME=/opt/docker \
+  -e VERSION=1.10.3 \
+  -e DEFAULT_PROXY=1 \
+  -e PROXY_HOST=127.0.0.1 \
+  -e PROXY_PORT=8080 \
   madharjan/docker-nginx:1.10.3 \
   /bin/sh -c "nginx-systemd-unit" | \
   sudo tee /etc/systemd/system/nginx.service

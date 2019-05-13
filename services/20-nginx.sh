@@ -7,6 +7,10 @@ if [ "${DEBUG}" = true ]; then
 fi
 
 DISABLE_NGINX=${DISABLE_NGINX:-0}
+DEFAULT_PROXY=${DEFAULT_PROXY:-0}
+PROXY_HOST=${PROXY_HOST:-}
+PROXY_PORT=${PROXY_PORT:-8080}
+PROXY_SCHEME=${PROXY_SCHEME:-http}
 
 if [ ! "${DISABLE_NGINX}" -eq 0 ]; then
   touch /etc/service/nginx/down
@@ -19,7 +23,16 @@ fi
 if [ -f /etc/nginx/conf.d/default.conf ]; then
    echo "Nginx config already exists"
 else
-  cp /config/etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+  if [ ! "${DEFAULT_PROXY}" -eq 0 ]; then
+    if [ -n "${PROXY_HOST}" ]; then
+      cp /config/etc/nginx/conf.d/proxy.conf /etc/nginx/conf.d/default.conf
+      sed -i "s/##PROXY_HOST##/${PROXY_HOST}/" /etc/nginx/conf.d/default.conf
+      sed -i "s/##PROXY_PORT##/${PROXY_PORT}/" /etc/nginx/conf.d/default.conf
+      sed -i "s/##PROXY_SCHEME##/${PROXY_SCHEME}/" /etc/nginx/conf.d/default.conf
+    fi
+  else 
+    cp /config/etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
+  fi
 fi
 
 if [ -f /var/www/html/index.html ]; then

@@ -24,6 +24,7 @@ mkdir -p /config/etc/nginx/conf.d
 mkdir -p /config/var/www/html
 
 cp ${NGINX_CONFIG_PATH}/default.conf /config/etc/nginx/conf.d/default.conf
+cp ${NGINX_CONFIG_PATH}/proxy.conf /config/etc/nginx/conf.d/proxy.conf
 cp ${NGINX_CONFIG_PATH}/index.html /config/var/www/html/index.html
 cp ${NGINX_CONFIG_PATH}/403.html /config/var/www/html/403.html
 cp ${NGINX_CONFIG_PATH}/404.html /config/var/www/html/404.html
