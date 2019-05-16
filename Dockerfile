@@ -15,9 +15,6 @@ COPY . /build
 
 RUN /build/scripts/install.sh && /build/scripts/cleanup.sh
 
-
-
-
 VOLUME ["/etc/nginx/conf.d", "/var/www/html", "/var/log/nginx"]
 
 CMD ["/sbin/my_init"]

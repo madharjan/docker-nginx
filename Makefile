@@ -77,6 +77,7 @@ clean: stop
 	docker rm nginx nginx_no_nginx nginx_project nginx_proxy || true
 	rm -rf /tmp/nginx || true
 	rm -rf /tmp/nginx_project || true
+	docker images | grep "^<none>" | awk '{print$3 }' | xargs docker rmi || true
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
