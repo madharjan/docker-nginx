@@ -16,16 +16,17 @@ Docker container for Nginx based on [madharjan/docker-base](https://github.com/m
 
 ### Environment
 
-| Variable            | Default          | Example                                                          |
-|---------------------|------------------|------------------------------------------------------------------|
-| DISABLE_NGINX       | 0                | 1 (to disable)                                                   |
-| INSTALL_PROJECT     | 0                | 1 (to enable)                                                    |
-| PROJECT_GIT_REPO    |                  | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
-| PROJECT_GIT_TAG     | HEAD             | v5.1.4                                                           |
-| DEFAULT_PROXY       | 0                | 1 (to enable)                                                    |
-| PROXY_SCHEME        | http             | https                                                            |
-| PROXY_HOST          |                  | 127.0.0.1                                                        |
-| PROXY_PORT          | 8080             | 8000                                                             |
+| Variable             | Default          | Example                                                          |
+|----------------------|------------------|------------------------------------------------------------------|
+| DISABLE_NGINX        | 0                | 1 (to disable)                                                   |
+| INSTALL_PROJECT      | 0                | 1 (to enable)                                                    |
+| PROJECT_GIT_REPO     |                  | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
+| PROJECT_GIT_TAG      | HEAD             | v5.1.4                                                           |
+| DEFAULT_PROXY        | 0                | 1 (to enable)                                                    |
+| PROXY_SCHEME         | http             | https                                                            |
+| PROXY_HOST           |                  | 127.0.0.1                                                        |
+| PROXY_PORT           | 8080             | 8000                                                             |
+| LINK_PROXY_CONTAINER |                  |                                                                  |
 
 ## Build
 
@@ -105,17 +106,19 @@ WantedBy=multi-user.target
 
 ## Generate Systemd Unit File
 
-| Variable            | Default          | Example                                                          |
-|---------------------|------------------|------------------------------------------------------------------|
-| PORT                |                  | 8080                                                             |
-| VOLUME_HOME         | /opt/docker      | /opt/data                                                        |
-| INSTALL_PROJECT     | 0                | 1 (to enable)                                                    |
-| PROJECT_GIT_REPO    |                  | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
-| PROJECT_GIT_TAG     | HEAD             | v5.1.4                                                           |
-| DEFAULT_PROXY       | 0                | 1 (to enable)                                                    |
-| PROXY_SCHEME        | http             | https                                                            |
-| PROXY_HOST          |                  | 127.0.0.1                                                        |
-| PROXY_PORT          | 8080             | 8000                                                             |
+| Variable             | Default          | Example                                                          |
+|----------------------|------------------|------------------------------------------------------------------|
+| PORT                 |                  | 8080                                                             |
+| VOLUME_HOME          | /opt/docker      | /opt/data                                                        |
+| NAME                 | ngnix            |                                                                  |
+| INSTALL_PROJECT      | 0                | 1 (to enable)                                                    |
+| PROJECT_GIT_REPO     |                  | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
+| PROJECT_GIT_TAG      | HEAD             | v5.1.4                                                           |
+| DEFAULT_PROXY        | 0                | 1 (to enable)                                                    |
+| PROXY_SCHEME         | http             | https                                                            |
+| PROXY_HOST           |                  | 127.0.0.1                                                        |
+| PROXY_PORT           | 8080             | 8000                                                             |
+| LINK_PROXY_CONTAINER |                  | nginx-web2py                                                     |
 
 ### With deploy web projects
 
@@ -141,7 +144,7 @@ sudo systemctl start nginx
 docker run --rm \
   -e PORT=80 \
   -e DEFAULT_PROXY=1 \
-  -e PROXY_HOST=127.0.0.1 \
+  -e LINK_PROXY_CONTAINER=odoo \
   -e PROXY_PORT=8080 \
   madharjan/docker-nginx:1.10.3 \
   nginx-systemd-unit | \

@@ -87,6 +87,7 @@
 }
 
 @test "checking request: project_updated (index.html via http)" {
+
   docker stop nginx_project nginx_proxy || true
   docker rm nginx_project nginx_proxy || true
   docker run -d \
