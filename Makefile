@@ -4,18 +4,31 @@ VERSION = 1.10.3
 
 DEBUG ?= true
 
-.PHONY: all build run tests stop clean tag_latest release clean_images
+DOCKER_USERNAME ?= $(shell read -p "DockerHub Username: " pwd; echo $$pwd)
+DOCKER_PASSWORD ?= $(shell stty -echo; read -p "DockerHub Password: " pwd; stty echo; echo $$pwd)
+DOCKER_LOGIN ?= $(shell cat ~/.docker/config.json | grep "docker.io" | wc -l)
+
+.PHONY: all build run test stop clean tag_latest release clean_images
 
 all: build
 
+docker_login:
+ifeq ($(DOCKER_LOGIN), 1)
+		@echo "Already login to DockerHub"
+else
+		@docker login -u $(DOCKER_USERNAME) -p $(DOCKER_PASSWORD)
+endif
+
 build:
 	docker build \
-	 --build-arg NGINX_VERSION=${VERSION} \
+	 --build-arg NGINX_VERSION=$(VERSION) \
 	 --build-arg VCS_REF=`git rev-parse --short HEAD` \
-	 --build-arg DEBUG=$(DEBUG) \
+	 --build-arg DEBUG=$(DEBUG)\
 	 -t $(NAME):$(VERSION) --rm .
 
 run:
+	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi
+
 	rm -rf /tmp/nginx
 	mkdir -p /tmp/nginx/etc
 	mkdir -p /tmp/nginx/html
@@ -61,32 +74,35 @@ run:
 
 	sleep 2
 
-tests:
+test:
 	sleep 2
 	./bats/bin/bats test/tests.bats
 
 stop:
-	docker exec nginx /bin/bash -c "rm -rf /etc/nginx/conf.d/*" || true
-	docker exec nginx /bin/bash -c "rm -rf /var/www/html/*" || true
-	docker exec nginx_project /bin/bash -c "rm -rf /etc/nginx/conf.d/*" || true
-	docker exec nginx_project /bin/bash -c "rm -rf /var/www/html/*" || true
-	docker exec nginx_project /bin/bash -c "rm -rf /var/www/html/.git" || true
-	docker stop nginx nginx_no_nginx nginx_project nginx_proxy|| true
+	docker exec nginx /bin/bash -c "rm -rf /etc/nginx/conf.d/*" 2> /dev/null || true
+	docker exec nginx /bin/bash -c "rm -rf /var/www/html/*" 2> /dev/null || true
+	docker exec nginx_project /bin/bash -c "rm -rf /etc/nginx/conf.d/*" 2> /dev/null || true
+	docker exec nginx_project /bin/bash -c "rm -rf /var/www/html/*" 2> /dev/null || true
+	docker exec nginx_project /bin/bash -c "rm -rf /var/www/html/.git" 2> /dev/null || true
+	docker stop nginx nginx_no_nginx nginx_project nginx_proxy 2> /dev/null || true
 
 clean: stop
-	docker rm nginx nginx_no_nginx nginx_project nginx_proxy || true
+	docker rm nginx nginx_no_nginx nginx_project nginx_proxy 2> /dev/null || true
 	rm -rf /tmp/nginx || true
 	rm -rf /tmp/nginx_project || true
-	docker images | grep "^<none>" | awk '{print$3 }' | xargs docker rmi || true
+	docker images | grep "<none>" | awk '{print$3 }' | xargs docker rmi 2> /dev/null || true
+
+publish: docker_login run test clean
+	docker push $(NAME)
 
 tag_latest:
 	docker tag $(NAME):$(VERSION) $(NAME):latest
 
-release: run tests clean tag_latest
-	@if ! docker images $(NAME) | awk '{ print $$2 }' | grep -q -F $(VERSION); then echo "$(NAME) version $(VERSION) is not yet built. Please run 'make build'"; false; fi
+release: docker_login  run test clean tag_latest
 	docker push $(NAME)
-	@echo "*** Don't forget to create a tag. git tag $(VERSION) && git push origin $(VERSION) ***"
-	curl -s -X POST https://hooks.microbadger.com/images/$(NAME)/JEGoeIhTzcKmaiXUikL3HE6W26k=
 
-clean_images:
-	docker rmi $(NAME):latest $(NAME):$(VERSION) || true
+clean_images: clean
+	docker rmi $(NAME):latest $(NAME):$(VERSION) 2> /dev/null || true
+	docker logout 
+
+

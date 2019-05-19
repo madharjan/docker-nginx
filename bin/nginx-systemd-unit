@@ -6,9 +6,11 @@ if [ "${DEBUG}" = true ]; then
   set -x
 fi
 
-DEF_PORT=80
+VERSION=1.10.3
+
+DEF_PORT=
 DEF_VOLUME_HOME=/opt/docker
-DEF_VERSION=1.10.3
+DEV_NAME=nginx
 
 DEF_INSTALL_PROJECT=0
 DEF_PROJECT_GIT_REPO=
@@ -21,7 +23,7 @@ DEF_PROXY_SCHEME=http
 
 PORT=${PORT:-$DEF_PORT}
 VOLUME_HOME=${VOLUME_HOME:-$DEF_VOLUME_HOME}
-VERSION=${VERSION:-$DEF_VERSION}
+NAME=${NAME:-$DEF_NAME}
 
 INSTALL_PROJECT=${INSTALL_PROJECT:-$DEF_INSTALL_PROJECT}
 PROJECT_GIT_REPO=${PROJECT_GIT_REPO:-$DEF_PROJECT_GIT_REPO}
@@ -32,6 +34,12 @@ PROXY_HOST=${PROXY_HOST:-DEF_PROXY_HOST}
 PROXY_PORT=${PROXY_PORT:-DEF_PROXY_PORT}
 PROXY_SCHEME=${PROXY_SCHEME:-DEF_PROXY_SCHEME}
 
+if [ -z ${PORT} ]; then
+  PORT_LINE=""
+else 
+  PORT_LINE="-p ${PORT}:5432 "
+fi
+
 /bin/cat <<-EOF
 [Unit]
 Description=Nginx
@@ -41,29 +49,28 @@ After=docker.service
 [Service]
 TimeoutStartSec=0
 
-ExecStartPre=-/bin/mkdir -p ${VOLUME_HOME}/nginx/etc/conf.d
-ExecStartPre=-/bin/mkdir -p ${VOLUME_HOME}/nginx/html
-ExecStartPre=-/bin/mkdir -p ${VOLUME_HOME}/nginx/log
-ExecStartPre=-/usr/bin/docker stop nginx
-ExecStartPre=-/usr/bin/docker rm nginx
+ExecStartPre=-/bin/mkdir -p ${VOLUME_HOME}/${NAME}/etc/conf.d
+ExecStartPre=-/bin/mkdir -p ${VOLUME_HOME}/${NAME}/html
+ExecStartPre=-/bin/mkdir -p ${VOLUME_HOME}/${NAME}/log
+ExecStartPre=-/usr/bin/docker stop ${NAME}
+ExecStartPre=-/usr/bin/docker rm ${NAME}
 ExecStartPre=-/usr/bin/docker pull madharjan/docker-nginx:${VERSION}
 
 ExecStart=/usr/bin/docker run \\
--p ${PORT}:80 \\
 -e INSTALL_PROJECT=${INSTALL_PROJECT} \\
 -e PROJECT_GIT_REPO=${PROJECT_GIT_REPO} \\
 -e PROJECT_GIT_TAG=${PROJECT_GIT_TAG} \\
--e DEFAULT_PROXY=1${DEFAULT_PROXY} \\
+-e DEFAULT_PROXY=${DEFAULT_PROXY} \\
 -e PROXY_SCHEME=${PROXY_SCHEME} \\
 -e PROXY_HOST=${PROXY_HOST} \\
 -e PROXY_PORT=${PROXY_PORT} \\
--v ${VOLUME_HOME}/nginx/etc/conf.d:/etc/nginx/conf.d \\
--v ${VOLUME_HOME}/nginx/html:/var/www/html \\
--v ${VOLUME_HOME}/nginx/log:/var/log/nginx \\
---name nginx \\
+${PORT_LINE}-v ${VOLUME_HOME}/${NAME}/etc/conf.d:/etc/nginx/conf.d \\
+-v ${VOLUME_HOME}/${NAME}/html:/var/www/html \\
+-v ${VOLUME_HOME}/${NAME}/log:/var/log/nginx \\
+--name ${NAME} \\
 madharjan/docker-nginx:${VERSION}
 
-ExecStop=/usr/bin/docker stop -t 2 nginx
+ExecStop=/usr/bin/docker stop -t 2 ${NAME}
 
 [Install]
 WantedBy=multi-user.target

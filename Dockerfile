@@ -13,7 +13,7 @@ ENV NGINX_VERSION ${NGINX_VERSION}
 RUN mkdir -p /build
 COPY . /build
 
-RUN /build/scripts/install.sh && /build/scripts/cleanup.sh
+RUN chmod 755 /build/scripts/*.sh && /build/scripts/install.sh && /build/scripts/cleanup.sh
 
 VOLUME ["/etc/nginx/conf.d", "/var/www/html", "/var/log/nginx"]
 
