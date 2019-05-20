@@ -21,14 +21,15 @@ else
 fi
 
 if [ -f /etc/nginx/conf.d/default.conf ]; then
-   echo "Nginx config already exists"
+   echo "Nginx config 'default.conf' already exists"
 else
   if [ ! "${DEFAULT_PROXY}" -eq 0 ]; then
     if [ -n "${PROXY_HOST}" ]; then
-      cp /config/etc/nginx/conf.d/proxy.conf /etc/nginx/conf.d/default.conf
-      sed -i "s/##PROXY_HOST##/${PROXY_HOST}/" /etc/nginx/conf.d/default.conf
-      sed -i "s/##PROXY_PORT##/${PROXY_PORT}/" /etc/nginx/conf.d/default.conf
-      sed -i "s/##PROXY_SCHEME##/${PROXY_SCHEME}/" /etc/nginx/conf.d/default.conf
+      cp /config/etc/nginx/conf.d/default-proxy.conf /etc/nginx/conf.d/default.conf
+
+      export PROXY_HOST PROXY_PORT PROXY_SCHEME
+      perl -p -i -e 's/\$\{([^}]+)\}/defined $ENV{$1} ? $ENV{$1} : $&/eg' /etc/nginx/conf.d/default.conf
+
     fi
   else 
     cp /config/etc/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf

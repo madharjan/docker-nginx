@@ -118,7 +118,7 @@ WantedBy=multi-user.target
 | PROXY_SCHEME         | http             | https                                                            |
 | PROXY_HOST           |                  | 127.0.0.1                                                        |
 | PROXY_PORT           | 8080             | 8000                                                             |
-| LINK_PROXY_CONTAINER |                  | nginx-web2py                                                     |
+| LINK_CONTAINERS      |                  | nginx-web2py:app,nginx:website                                   |
 
 ### With deploy web projects
 
@@ -144,12 +144,32 @@ sudo systemctl start nginx
 docker run --rm \
   -e PORT=80 \
   -e DEFAULT_PROXY=1 \
-  -e LINK_PROXY_CONTAINER=odoo \
+  -e PROXY_HOST=odoo \
   -e PROXY_PORT=8080 \
+  -e LINK_CONTAINERS=odoo:odoo,nginx:website \
   madharjan/docker-nginx:1.10.3 \
   nginx-systemd-unit | \
   sudo tee /etc/systemd/system/nginx.service
 
 sudo systemctl enable nginx
 sudo systemctl start nginx
+```
+
+## Add virtualhost reverse proxy config
+
+| Variable             | Default          | Example                                                          |
+|----------------------|------------------|------------------------------------------------------------------|
+| PROXY_VHOST_NAME     |                  | myapp.local                                                      |
+| PROXY_SCHEME         | http             | https                                                            |
+| PROXY_HOST           |                  | 127.0.0.1                                                        |
+| PROXY_PORT           | 8080             | 8000                                                             |
+
+```bash
+# add proxy.conf
+docker exec -it \
+  -e PROXY_VHOST_NAME=myapp \
+  -e PROXY_HOST=172.18.0.5 \
+  -e PROXY_PORT=8080 \
+  nginx \
+  nginx-vhost-proxy-conf
 ```

@@ -24,7 +24,8 @@ mkdir -p /config/etc/nginx/conf.d
 mkdir -p /config/var/www/html
 
 cp ${NGINX_CONFIG_PATH}/default.conf /config/etc/nginx/conf.d/default.conf
-cp ${NGINX_CONFIG_PATH}/proxy.conf /config/etc/nginx/conf.d/proxy.conf
+cp ${NGINX_CONFIG_PATH}/default-proxy.conf /config/etc/nginx/conf.d/default-proxy.conf
+cp ${NGINX_CONFIG_PATH}/vhost-proxy.conf /config/etc/nginx/conf.d/vhost-proxy.conf
 cp ${NGINX_CONFIG_PATH}/index.html /config/var/www/html/index.html
 cp ${NGINX_CONFIG_PATH}/403.html /config/var/www/html/403.html
 cp ${NGINX_CONFIG_PATH}/404.html /config/var/www/html/404.html
@@ -38,4 +39,6 @@ chmod 750 /etc/my_init.d/20-nginx.sh
 
 cp /build/bin/nginx-systemd-unit /usr/local/bin
 chmod 750 /usr/local/bin/nginx-systemd-unit
+cp /build/bin/nginx-vhost-proxy-conf /usr/local/bin
+chmod 750 /usr/local/bin/nginx-vhost-proxy-conf
 

@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -e
+
+if [ "${DEBUG}" = true ]; then
+  set -x
+fi
+
+PROXY_VHOST_NAME=${PROXY_VHOST_NAME:-proxy.local}
+PROXY_HOST=${PROXY_HOST:-}
+PROXY_PORT=${PROXY_PORT:-8080}
+PROXY_SCHEME=${PROXY_SCHEME:-http}
+
+if [ -f /etc/nginx/conf.d/${PROXY_VHOST_NAME}.conf ]; then
+   echo "Nginx config '${PROXY_VHOST_NAME}.conf' already exists"
+else
+  if [ -n "${PROXY_HOST}" ]; then
+    cp /config/etc/nginx/conf.d/vhost-proxy.conf /etc/nginx/conf.d/${PROXY_VHOST_NAME}.conf
+
+    export PROXY_VHOST_NAME PROXY_HOST PROXY_PORT PROXY_SCHEME
+    perl -p -i -e 's/\$\{([^}]+)\}/defined $ENV{$1} ? $ENV{$1} : $&/eg' /etc/nginx/conf.d/${PROXY_VHOST_NAME}.conf
+
+    echo "Nginx config '${PROXY_VHOST_NAME}.conf' created"
+    nginx -t
+    sv restart nginx
+  fi
+fi
