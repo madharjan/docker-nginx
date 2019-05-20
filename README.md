@@ -19,14 +19,15 @@ Docker container for Nginx based on [madharjan/docker-base](https://github.com/m
 | Variable             | Default          | Example                                                          |
 |----------------------|------------------|------------------------------------------------------------------|
 | DISABLE_NGINX        | 0                | 1 (to disable)                                                   |
+|                      |                  |                                                                  |
 | INSTALL_PROJECT      | 0                | 1 (to enable)                                                    |
 | PROJECT_GIT_REPO     |                  | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
 | PROJECT_GIT_TAG      | HEAD             | v5.1.4                                                           |
+|                      |                  |                                                                  |
 | DEFAULT_PROXY        | 0                | 1 (to enable)                                                    |
 | PROXY_SCHEME         | http             | https                                                            |
 | PROXY_HOST           |                  | 127.0.0.1                                                        |
 | PROXY_PORT           | 8080             | 8000                                                             |
-| LINK_PROXY_CONTAINER |                  |                                                                  |
 
 ## Build
 
@@ -111,13 +112,16 @@ WantedBy=multi-user.target
 | PORT                 |                  | 8080                                                             |
 | VOLUME_HOME          | /opt/docker      | /opt/data                                                        |
 | NAME                 | ngnix            |                                                                  |
+|                      |                  |                                                                  |
 | INSTALL_PROJECT      | 0                | 1 (to enable)                                                    |
 | PROJECT_GIT_REPO     |                  | https://github.com/BlackrockDigital/startbootstrap-creative.git  |
 | PROJECT_GIT_TAG      | HEAD             | v5.1.4                                                           |
+|                      |                  |                                                                  |
 | DEFAULT_PROXY        | 0                | 1 (to enable)                                                    |
 | PROXY_SCHEME         | http             | https                                                            |
 | PROXY_HOST           |                  | 127.0.0.1                                                        |
 | PROXY_PORT           | 8080             | 8000                                                             |
+|                      |                  |                                                                  |
 | LINK_CONTAINERS      |                  | nginx-web2py:app,nginx:website                                   |
 
 ### With deploy web projects
