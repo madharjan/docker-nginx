@@ -42,8 +42,8 @@ LINK_PROXY_CONTAINER=${LINK_PROXY_CONTAINER:-$DEF_LINK_PROXY_CONTAINER}
 if [ -z ${LINK_PROXY_CONTAINER} ]; then
   LINK_LINE=""
 else 
-  LINK_LINE="--link ${LINK_PROXY_CONTAINER}:odoo "
-  PROXY_HOST="odoo"
+  LINK_LINE="--link ${LINK_PROXY_CONTAINER}:backend "
+  PROXY_HOST="backend"
 fi
 
 if [ -z ${PORT} ]; then

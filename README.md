@@ -10,7 +10,7 @@ Docker container for Nginx based on [madharjan/docker-base](https://github.com/m
 * Nginx error log forwarded to Docker logs
 * Bats [bats-core/bats-core](https://github.com/bats-core/bats-core) based test cases
 * Deploy/update web projects from git
-* Set reverse proxy
+* Setup reverse proxy
 
 ## Nginx 1.10.3 (docker-nginx)
 
