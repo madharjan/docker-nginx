@@ -97,7 +97,7 @@
     -e INSTALL_PROJECT=1 \
     -e PROJECT_GIT_REPO=https://github.com/BlackrockDigital/startbootstrap-creative.git \
     -e PROJECT_GIT_TAG=v5.1.4 \
-    --name nginx_project madharjan/docker-nginx:1.10.3 
+    --name nginx_project madharjan/docker-nginx:1.18.0 
   sleep 3
 
   docker run -d \
@@ -106,7 +106,7 @@
   -e DEFAULT_PROXY=1 \
   -e PROXY_HOST=project \
   -e PROXY_PORT=80 \
-  --name nginx_proxy madharjan/docker-nginx:1.10.3 
+  --name nginx_proxy madharjan/docker-nginx:1.18.0 
 
 	sleep 2
   run docker exec nginx_project /bin/bash -c "curl -s -L http://localhost/index.html | wc -l"

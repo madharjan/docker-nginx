@@ -1,6 +1,6 @@
 
 NAME = madharjan/docker-nginx
-VERSION = 1.10.3
+VERSION = 1.18.0
 
 DEBUG ?= true
 
