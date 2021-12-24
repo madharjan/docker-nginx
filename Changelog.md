@@ -1,6 +1,11 @@
 
 # Changelog
 
+## 1.18.0
+
+* Updated to be based on madharjan/docker-base:20.04
+* Using Nginx 1.18.0
+
 ## 1.10.3
 
 * Updated to be based on madharjan/docker-base:16.04
