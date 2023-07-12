@@ -1,12 +1,12 @@
-FROM madharjan/docker-base:20.04
-MAINTAINER Madhav Raj Maharjan <madhav.maharjan@gmail.com>
+FROM ubuntu:20.04
+MAINTAINER Rockyimman
 
 ARG VCS_REF
 ARG NGINX_VERSION
 ARG DEBUG=false
 
-LABEL description="Docker container for Nginx" os_version="Ubuntu ${UBUNTU_VERSION}" \
-      org.label-schema.vcs-ref=${VCS_REF} org.label-schema.vcs-url="https://github.com/madharjan/docker-nginx"
+#LABEL description="Docker container for Nginx" os_version="Ubuntu ${UBUNTU_VERSION}" \
+      #org.label-schema.vcs-ref=${VCS_REF} org.label-schema.vcs-url="https://github.com/madharjan/docker-nginx"
 
 ENV NGINX_VERSION ${NGINX_VERSION}
 
